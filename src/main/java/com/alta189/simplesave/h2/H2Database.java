@@ -555,4 +555,27 @@ public class H2Database extends Database {
 			e.printStackTrace();
 		}
 	}
+
+	@Override
+	public boolean directQuery(String query) {
+		boolean booleanResult = false;
+		if (!isConnected()) {
+			try {
+				connect();
+			} catch (ConnectionException e) {
+				throw new RuntimeException(e);
+			}
+		}
+		try {
+			if (query.toUpperCase().contains("INSERT INTO") || query.toUpperCase().contains("UPDATE") || query.toUpperCase().contains("DELETE FROM")) {
+				connection.prepareStatement(query).executeUpdate();
+			} else if (query.toUpperCase().contains("SELECT")) {
+				connection.prepareStatement(query).executeQuery().close();
+			}
+			booleanResult = true;
+		} catch (SQLException e) {
+			throw new RuntimeException(e);
+		}
+		return booleanResult;
+	}
 }

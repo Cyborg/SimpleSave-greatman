@@ -98,6 +98,8 @@ public abstract class Database {
 
 	public abstract void save(Class<?> tableClass, Object o);
 
+	public abstract boolean directQuery(String query);
+
 	public void save(Object o) {
 		save(o.getClass(), o);
 	}

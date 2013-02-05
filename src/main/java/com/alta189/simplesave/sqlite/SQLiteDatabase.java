@@ -531,4 +531,26 @@ public class SQLiteDatabase extends Database {
 		}
 		return booleanResult;
 	}
+
+	@Override
+	public ResultSet directQueryWithResult(String query) {
+		ResultSet result = null;
+		if (!isConnected()) {
+			try {
+				connect();
+			} catch (ConnectionException e) {
+				throw new RuntimeException(e);
+			}
+		}
+		try {
+			if (query.toUpperCase().contains("INSERT INTO") || query.toUpperCase().contains("UPDATE") || query.toUpperCase().contains("DELETE FROM")) {
+				connection.prepareStatement(query).executeUpdate();
+			} else if (query.toUpperCase().contains("SELECT")) {
+				result = connection.prepareStatement(query).executeQuery();
+			}
+		} catch (SQLException e) {
+			throw new RuntimeException(e);
+		}
+		return result;
+	}
 }

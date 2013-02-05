@@ -454,6 +454,29 @@ public class MySQLDatabase extends Database {
 	}
 
 	@Override
+	public ResultSet directQueryWithResult(String query) {
+		ResultSet result = null;
+		if (!isConnected()) {
+			try {
+				connect();
+			} catch (ConnectionException e) {
+				throw new RuntimeException(e);
+			}
+		}
+		try {
+			if (query.toUpperCase().contains("INSERT INTO") || query.toUpperCase().contains("UPDATE") || query.toUpperCase().contains("DELETE FROM")) {
+				conn.prepareStatement(query).executeUpdate();
+			} else if (query.toUpperCase().contains("SELECT")) {
+				result = conn.prepareStatement(query).executeQuery();
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+			throw new RuntimeException(e);
+		}
+		return result;
+	}
+
+	@Override
 	public void remove(Class<?> tableClass, Object o) {
 		if (!isConnected()) {
 			try {

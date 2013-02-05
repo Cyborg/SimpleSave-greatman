@@ -25,6 +25,7 @@ import com.alta189.simplesave.query.Query;
 import com.alta189.simplesave.query.QueryResult;
 import com.alta189.simplesave.query.SelectQuery;
 
+import java.sql.ResultSet;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
@@ -99,6 +100,8 @@ public abstract class Database {
 	public abstract void save(Class<?> tableClass, Object o);
 
 	public abstract boolean directQuery(String query);
+
+	public abstract ResultSet directQueryWithResult(String query);
 
 	public void save(Object o) {
 		save(o.getClass(), o);

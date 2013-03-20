@@ -72,4 +72,13 @@ public class MySQLConfiguration extends Configuration {
 		setProperty(MySQLConstants.Database, database);
 		return this;
 	}
+
+	public String getPrefix() {
+		return getProperty(MySQLConstants.Prefix);
+	}
+
+	public MySQLConfiguration setPrefix(String prefix) {
+		setProperty(MySQLConstants.Prefix, prefix);
+		return this;
+	}
 }

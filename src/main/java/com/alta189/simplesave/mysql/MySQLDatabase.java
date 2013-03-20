@@ -53,6 +53,7 @@ public class MySQLDatabase extends Database {
 	private final String connUrl;
 	private final String user;
 	private final String pass;
+	private final String prefix;
 	private Connection conn;
 
 	static {
@@ -85,6 +86,11 @@ public class MySQLDatabase extends Database {
 			throw new IllegalArgumentException("Database is null or empty!");
 		}
 
+		String prefix = config.getProperty(MySQLConstants.Prefix);
+		if (prefix == null) {
+			prefix = "";
+		}
+
 		StringBuilder connUrl = new StringBuilder();
 		connUrl.append("jdbc:mysql://");
 		connUrl.append(host);
@@ -97,12 +103,14 @@ public class MySQLDatabase extends Database {
 		this.connUrl = connUrl.toString();
 		this.user = user;
 		this.pass = pass;
+		this.prefix = prefix;
 	}
 
 	public MySQLDatabase(String connUrl, String user, String pass) {
 		this.connUrl = connUrl;
 		this.user = user;
 		this.pass = pass;
+		this.prefix = "";
 	}
 
 	public static String getDriver() {
@@ -173,6 +181,7 @@ public class MySQLDatabase extends Database {
 				PreparedStatement statement = null;
 				StringBuilder queryBuilder = new StringBuilder();
 				queryBuilder.append("SELECT * from ")
+							.append(prefix)
 							.append(table.getName())
 							.append(" ");
 				if (!selectQuery.where().getEntries().isEmpty()) {
@@ -315,6 +324,7 @@ public class MySQLDatabase extends Database {
 		long id = TableUtils.getIdValue(table, o);
 		if (id == 0) {
 			query.append("INSERT INTO ")
+				 .append(prefix)
 				 .append(table.getName())
 				 .append(" (");
 			StringBuilder valuesBuilder = new StringBuilder();
@@ -335,6 +345,7 @@ public class MySQLDatabase extends Database {
 			query.append(valuesBuilder.toString());
 		} else {
 			query.append("UPDATE ")
+				 .append(prefix)
 				 .append(table.getName())
 				 .append(" SET ");
 			int count = 0;
@@ -500,6 +511,7 @@ public class MySQLDatabase extends Database {
 		if (id == 0)
 			throw new IllegalArgumentException("Object was never inserted into database!");
 		query.append("DELETE FROM ")
+			 .append(prefix)
 			 .append(table.getName())
 			 .append(" WHERE ")
 			 .append(table.getId().getName())
@@ -535,7 +547,7 @@ public class MySQLDatabase extends Database {
 			throw new UnknownTableException("The table class '" + tableClass.getCanonicalName() + "' is not registered!");
 		}
 		StringBuilder query = new StringBuilder();
-		query.append("DELETE FROM ").append(table.getName());
+		query.append("DELETE FROM ").append(prefix).append(table.getName());
 
 		try {
 			PreparedStatement statement = conn.prepareStatement(query.toString());
@@ -549,8 +561,10 @@ public class MySQLDatabase extends Database {
 		for (TableRegistration table : getTables().values()) {
 			StringBuilder query = new StringBuilder();
 			query.append("CREATE TABLE IF NOT EXISTS ")
+				 .append(prefix)
 				 .append(table.getName())
 				 .append(" (")
+				 .append(prefix)
 				 .append(table.getId().getName())
 				 .append(" ")
 				 .append(MySQLUtil.getMySQLTypeFromClass(table.getId().getType()))
@@ -585,6 +599,7 @@ public class MySQLDatabase extends Database {
 		// TODO Update table structure
 		StringBuilder query = new StringBuilder();
 		query.append("SELECT * FROM ")
+		     .append(prefix)
 			 .append(table.getName())
 			 .append(" LIMIT 1");
 		try {
@@ -611,7 +626,7 @@ public class MySQLDatabase extends Database {
 			}
 			for (String s : redo.keySet()){
 				StringBuilder q = new StringBuilder();
-				q.append("ALTER TABLE ").append(table.getName()).append(" ");
+				q.append("ALTER TABLE ").append(prefix).append(table.getName()).append(" ");
 				String[] results = redo.get(s).split(";");
 				if (results[0].equalsIgnoreCase("true")){
 					q.append("MODIFY COLUMN ").append(s).append(" ").append(results[1]);

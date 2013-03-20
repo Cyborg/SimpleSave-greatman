@@ -24,5 +24,6 @@ public class MySQLConstants {
 	public static final String Database = "mysql.database";
 	public static final String DefaultUser = "root";
 	public static final String DefaultPass = "";
+	public static final String Prefix = "";
 	public static final int DefaultPort = 3306;
 }

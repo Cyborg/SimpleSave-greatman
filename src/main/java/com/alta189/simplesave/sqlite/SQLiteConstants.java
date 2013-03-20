@@ -19,4 +19,5 @@ package com.alta189.simplesave.sqlite;
 public class SQLiteConstants {
 	public static final String Path = "sqlite.path";
 	public static final String DefaultPath = "default.db";
+	public static final String Prefix = "";
 }

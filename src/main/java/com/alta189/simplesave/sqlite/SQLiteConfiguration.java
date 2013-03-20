@@ -37,4 +37,13 @@ public class SQLiteConfiguration extends Configuration {
 		this.setProperty(SQLiteConstants.Path, path);
 		return this;
 	}
+
+	public String getPrefix() {
+		return getProperty(SQLiteConstants.Prefix);
+	}
+
+	public SQLiteConfiguration setPrefix(String prefix) {
+		this.setProperty(SQLiteConstants.Prefix, prefix);
+		return this;
+	}
 }

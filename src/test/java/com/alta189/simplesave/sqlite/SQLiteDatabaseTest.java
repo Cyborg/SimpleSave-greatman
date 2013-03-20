@@ -41,12 +41,13 @@ public class SQLiteDatabaseTest {
 		SQLiteConfiguration config = new SQLiteConfiguration();
 		File tmpfile = null;
 		try {
-			tmpfile = File.createTempFile("h2test_", ".db");
+			tmpfile = File.createTempFile("sqlitetest_", ".db");
 		} catch (IOException e) {
 			e.printStackTrace();
 			fail("IOException occured: " + e.toString());
 		}
 		assertNotNull(tmpfile);
+		config.setPrefix("test_");
 		config.setPath(tmpfile.getAbsolutePath().substring(0, tmpfile.getAbsolutePath().indexOf(".db")));
 		tmpfile.deleteOnExit();
 		SQLiteDatabase db = (SQLiteDatabase) DatabaseFactory.createNewDatabase(config);

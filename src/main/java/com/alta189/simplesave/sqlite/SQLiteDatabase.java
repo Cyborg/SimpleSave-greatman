@@ -49,6 +49,7 @@ import com.alta189.simplesave.query.OrderQuery.OrderPair;
 public class SQLiteDatabase extends Database {
 	private static final String driver = "sqlite";
 	private final String uri;
+	private final String prefix;
 	private Connection connection;
 
 	static {
@@ -60,11 +61,17 @@ public class SQLiteDatabase extends Database {
 		if (path == null || path.isEmpty()) {
 			throw new IllegalArgumentException("Path is null or empty!");
 		}
+		String prefix = config.getProperty(SQLiteConstants.Prefix);
+		if (prefix == null) {
+			prefix = "";
+		}
 		this.uri = "jdbc:sqlite:" + path;
+		this.prefix = prefix;
 	}
 
 	public SQLiteDatabase(String uri) {
 		this.uri = uri;
+		this.prefix = "";
 	}
 
 	public static String getDriver() {
@@ -119,7 +126,7 @@ public class SQLiteDatabase extends Database {
 					SelectQuery select = (SelectQuery) query;
 					TableRegistration table = getTableRegistration(select.getTableClass());
 					PreparedStatement statement = null;
-					StringBuilder queryBuilder = new StringBuilder("SELECT * FROM ").append(table.getName()).append(" ");
+					StringBuilder queryBuilder = new StringBuilder("SELECT * FROM ").append(prefix).append(table.getName()).append(" ");
 					if (!select.where().getEntries().isEmpty()) {
 						queryBuilder.append("WHERE ");
 						int iter = 0;
@@ -264,6 +271,7 @@ public class SQLiteDatabase extends Database {
 		long id = TableUtils.getIdValue(table, o);
 		if (id == 0) {
 			buffer.append("INSERT INTO ")
+					.append(prefix)
 					.append(table.getName())
 					.append(" (");
 			StringBuilder values = new StringBuilder();
@@ -284,6 +292,7 @@ public class SQLiteDatabase extends Database {
 			buffer.append(values.toString());
 		} else {
 			buffer.append("UPDATE ")
+					.append(prefix)
 					.append(table.getName())
 					.append(" SET ");
 			int iter = 0;
@@ -401,6 +410,7 @@ public class SQLiteDatabase extends Database {
 			throw new IllegalArgumentException("Object was never inserted into database!");
 		}
 		query.append("DELETE FROM ")
+				.append(prefix)
 				.append(table.getName())
 				.append(" WHERE ")
 				.append(table.getId().getName())
@@ -436,7 +446,7 @@ public class SQLiteDatabase extends Database {
 			throw new UnknownTableException("The table class '" + tableClass.getCanonicalName() + "' is not registered!");
 		}
 		StringBuilder query = new StringBuilder();
-		query.append("DELETE FROM ").append(table.getName());
+		query.append("DELETE FROM ").append(prefix).append(table.getName());
 
 		try {
 			PreparedStatement statement = connection.prepareStatement(query.toString());
@@ -449,7 +459,7 @@ public class SQLiteDatabase extends Database {
 	private void createTables() {
 		// Query - "CREATE TABLE IF NOT EXISTS <table> (<field> <type>...)"
 		for (TableRegistration table : getTables().values()) {
-			StringBuilder builder = new StringBuilder("CREATE TABLE IF NOT EXISTS " + table.getName() + " (");
+			StringBuilder builder = new StringBuilder("CREATE TABLE IF NOT EXISTS " + prefix + table.getName() + " (");
 			int iter = 0;
 			Collection<FieldRegistration> fields = table.getFields();
 			builder.append("'").append(table.getId().getName()).append("'")
@@ -477,6 +487,7 @@ public class SQLiteDatabase extends Database {
 		// TODO Update table structure
 		StringBuilder query = new StringBuilder();
 		query.append("SELECT * FROM ")
+		     .append(prefix)
 			 .append(table.getName())
 			 .append(" LIMIT 1");
 		try {
@@ -500,7 +511,7 @@ public class SQLiteDatabase extends Database {
 			for (String s : redo.keySet()){
 				StringBuilder q = new StringBuilder();
 				String[] results = redo.get(s).split(";");
-				q.append("ALTER TABLE ").append(table.getName()).append(" ");
+				q.append("ALTER TABLE ").append(prefix).append(table.getName()).append(" ");
 				q.append("ADD COLUMN ").append(s).append(" ").append(results[1]);
 				connection.prepareStatement(q.toString()).executeUpdate();
 			}

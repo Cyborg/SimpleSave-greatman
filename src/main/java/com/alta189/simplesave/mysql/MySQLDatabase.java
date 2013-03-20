@@ -564,7 +564,6 @@ public class MySQLDatabase extends Database {
 				 .append(prefix)
 				 .append(table.getName())
 				 .append(" (")
-				 .append(prefix)
 				 .append(table.getId().getName())
 				 .append(" ")
 				 .append(MySQLUtil.getMySQLTypeFromClass(table.getId().getType()))

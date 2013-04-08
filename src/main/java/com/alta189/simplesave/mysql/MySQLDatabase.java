@@ -400,8 +400,13 @@ public class MySQLDatabase extends Database {
 					} else if (fieldRegistration.getType().equals(byte.class) || fieldRegistration.getType().equals(Byte.class)) {
 						PreparedStatementUtils.setObject(statement, i, (Byte) TableUtils.getValue(fieldRegistration, o));
 					} else if (fieldRegistration.getType().equals(Timestamp.class)) {
-						PreparedStatementUtils.setObject(statement, i, ((Timestamp) TableUtils.getValue(fieldRegistration, o)).getTime());
-				    } else {
+						Timestamp timestamp = TableUtils.getValue(fieldRegistration, o);
+						if (timestamp != null) {
+							PreparedStatementUtils.setObject(statement, i, timestamp.getTime());
+						} else {
+							PreparedStatementUtils.setObject(statement, i, 0);
+						}
+					} else {
 						PreparedStatementUtils.setObject(statement, i, (Object) TableUtils.getValue(fieldRegistration, o));
 					}
 				}

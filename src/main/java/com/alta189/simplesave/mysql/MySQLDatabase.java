@@ -44,6 +44,7 @@ import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.sql.Timestamp;
 import java.util.Collection;
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -398,7 +399,9 @@ public class MySQLDatabase extends Database {
 						PreparedStatementUtils.setObject(statement, i, (Float) TableUtils.getValue(fieldRegistration, o));
 					} else if (fieldRegistration.getType().equals(byte.class) || fieldRegistration.getType().equals(Byte.class)) {
 						PreparedStatementUtils.setObject(statement, i, (Byte) TableUtils.getValue(fieldRegistration, o));
-					} else {
+					} else if (fieldRegistration.getType().equals(Timestamp.class)) {
+						PreparedStatementUtils.setObject(statement, i, ((Timestamp) TableUtils.getValue(fieldRegistration, o)).getTime());
+				    } else {
 						PreparedStatementUtils.setObject(statement, i, (Object) TableUtils.getValue(fieldRegistration, o));
 					}
 				}

@@ -17,6 +17,7 @@
 package com.alta189.simplesave.sqlite;
 
 import java.io.Serializable;
+import java.sql.Timestamp;
 
 public class SQLiteUtil {
 	public static String getSQLiteTypeFromClass(Class<?> clazz) {
@@ -36,6 +37,8 @@ public class SQLiteUtil {
 			return "FLOAT";
 		} else if (clazz.equals(byte.class) || clazz.equals(Byte.class)) {
 			return "TINYINT";
+		} else if (clazz.equals(Timestamp.class)) {
+			return "LONG";
 		}
 		Class<?> checkclazz = clazz;
 		while (checkclazz!=null){

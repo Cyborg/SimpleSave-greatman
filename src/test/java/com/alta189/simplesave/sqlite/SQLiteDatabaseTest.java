@@ -29,6 +29,7 @@ import org.junit.Test;
 
 import java.io.File;
 import java.io.IOException;
+import java.sql.Timestamp;
 
 import static junit.framework.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
@@ -70,6 +71,7 @@ public class SQLiteDatabaseTest {
 		}
 		TestClass one = new TestClass();
 		one.setName("Hello World");
+		one.timestamp = new Timestamp(System.currentTimeMillis());
 		db.save(TestClass.class, one);
 		TestClass two = new TestClass();
 		two.setName("Cruel World");
@@ -77,6 +79,8 @@ public class SQLiteDatabaseTest {
 		assertEquals(db.getTableRegistration(TestClass.class).getTableClass(), TestClass.class);
 		assertEquals(db.select(TestClass.class).execute().find().size(), 2);
 		assertEquals(db.select(TestClass.class).where().equal("name", "Hello World").execute().findOne().name, "Hello World");
+		assertEquals(one.timestamp, db.select(TestClass.class).where().equal("name", "Hello World").execute().findOne().timestamp);
+
 		try {
 			db.close();
 		} catch (ConnectionException e) {
@@ -92,6 +96,9 @@ public class SQLiteDatabaseTest {
 
 		@Field
 		private String name;
+
+		@Field
+		private Timestamp timestamp;
 
 		protected long getId() {
 			return id;

@@ -25,6 +25,7 @@ import java.lang.reflect.Field;
 import java.sql.Blob;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -102,6 +103,8 @@ public class ResultSetUtils {
 					field.setByte(object, set.getByte(fieldRegistration.getName()));
 				} else if (fieldRegistration.getType().equals(Byte.class)) {
 					field.set(object, set.getObject(fieldRegistration.getName()));
+				} else if (fieldRegistration.getType().equals(Timestamp.class)) {
+					field.set(object, set.getTimestamp(fieldRegistration.getName()));
 				} else {
 					try {
 						Blob b = set.getBlob(fieldRegistration.getName());

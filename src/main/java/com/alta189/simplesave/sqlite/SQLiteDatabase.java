@@ -24,6 +24,7 @@ import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.sql.Timestamp;
 import java.util.Collection;
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -343,6 +344,15 @@ public class SQLiteDatabase extends Database {
 						PreparedStatementUtils.setObject(statement, i, (Float) TableUtils.getValue(fieldRegistration, o));
 					} else if (fieldRegistration.getType().equals(byte.class) || fieldRegistration.getType().equals(Byte.class)) {
 						PreparedStatementUtils.setObject(statement, i, (Byte) TableUtils.getValue(fieldRegistration, o));
+					} else if (fieldRegistration.getType().equals(Timestamp.class)) {
+						System.out.println("ENTRY:" + TableUtils.getValue(fieldRegistration, o));
+						Timestamp timestamp = TableUtils.getValue(fieldRegistration, o);
+						if (timestamp != null) {
+							PreparedStatementUtils.setObject(statement, i, timestamp.getTime());
+						} else {
+							PreparedStatementUtils.setObject(statement, i, 0);
+						}
+
 					} else {
 						PreparedStatementUtils.setObject(statement, i, (Object) TableUtils.getValue(fieldRegistration, o));
 					}

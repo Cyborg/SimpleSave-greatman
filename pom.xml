@@ -9,6 +9,13 @@
 	<version>1.2.1-SNAPSHOT</version>
 	<packaging>jar</packaging>
 
+	<!-- Source code -->
+	<scm>
+		<developerConnection>scm:git:git@github.com:greatman/simplesave.git</developerConnection>
+		<connection>scm:git:git://github.com/greatman/simplesave.git</connection>
+		<url>https://github.com/greatman/simplesave</url>
+	</scm>
+
 	<developers>
 		<developer>
 			<id>alta189</id>

@@ -402,7 +402,7 @@ public class MySQLDatabase extends Database {
 					} else if (fieldRegistration.getType().equals(Timestamp.class)) {
 						Timestamp timestamp = TableUtils.getValue(fieldRegistration, o);
 						if (timestamp != null) {
-							PreparedStatementUtils.setObject(statement, i, timestamp.getTime());
+							PreparedStatementUtils.setObject(statement, i, timestamp.toString());
 						} else {
 							PreparedStatementUtils.setObject(statement, i, 0);
 						}

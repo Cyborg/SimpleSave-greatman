@@ -38,7 +38,7 @@ public class MySQLUtil {
 		} else if (clazz.equals(byte.class) || clazz.equals(Byte.class)) {
 			return "TINYINT";
 		} else if (clazz.equals(Timestamp.class)) {
-			return "BIGINT";
+			return "TIMESTAMP";
 		}
 		Class<?> checkclazz = clazz;
 		while (checkclazz!=null){

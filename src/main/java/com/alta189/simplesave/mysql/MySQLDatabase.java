@@ -619,7 +619,8 @@ public class MySQLDatabase extends Database {
 			 .append(table.getName())
 			 .append(" LIMIT 1");
 		try {
-			ResultSet result = conn.prepareStatement(query.toString()).executeQuery();
+			PreparedStatement statement2 = conn.prepareStatement(query.toString());
+			ResultSet result = statement2.executeQuery();
 			ResultSetMetaData meta = result.getMetaData();
 			Collection<FieldRegistration> fields = table.getFields();
 			// <field,alreadyexisting?>
@@ -640,7 +641,9 @@ public class MySQLDatabase extends Database {
 				if (!found){
 					redo.put(f.getName(),false + ";" + deftype);
 				}
+
 			}
+			statement2.close();
 			for (String s : redo.keySet()){
 				StringBuilder q = new StringBuilder();
 				q.append("ALTER TABLE ").append(prefix).append(table.getName()).append(" ");

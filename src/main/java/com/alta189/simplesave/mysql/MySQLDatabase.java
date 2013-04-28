@@ -611,7 +611,8 @@ public class MySQLDatabase extends Database {
 			 .append(table.getName())
 			 .append(" LIMIT 1");
 		try {
-			ResultSetMetaData meta = conn.prepareStatement(query.toString()).executeQuery().getMetaData();
+			ResultSet result = conn.prepareStatement(query.toString()).executeQuery();
+			ResultSetMetaData meta = result.getMetaData();
 			Collection<FieldRegistration> fields = table.getFields();
 			// <field,alreadyexisting?>
 			Map<String,String> redo = new LinkedHashMap<String,String>();
@@ -643,6 +644,7 @@ public class MySQLDatabase extends Database {
 				}
 				conn.prepareStatement(q.toString()).executeUpdate();
 			}
+
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}

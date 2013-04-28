@@ -294,6 +294,7 @@ public class MySQLDatabase extends Database {
 				ResultSet set = statement.executeQuery();
 				QueryResult<T> result = new QueryResult<T>(ResultSetUtils.buildResultList(table, (Class<T>) table.getTableClass(), set));
 				set.close();
+				statement.close();
 				return result;
 			}
 		} catch (SQLException e) {
@@ -444,6 +445,7 @@ public class MySQLDatabase extends Database {
 				}
 				resultSet.close();
 			}
+			statement.close();
 		} catch (SQLException e) {
 			throw new RuntimeException(e);
 		}
@@ -461,9 +463,13 @@ public class MySQLDatabase extends Database {
 		}
 		try {
 			if (query.toUpperCase().contains("INSERT INTO") || query.toUpperCase().contains("UPDATE") || query.toUpperCase().contains("DELETE FROM")) {
-				conn.prepareStatement(query).executeUpdate();
+				PreparedStatement statement = conn.prepareStatement(query);
+				statement.executeUpdate();
+				statement.close();
 			} else if (query.toUpperCase().contains("SELECT")) {
-				conn.prepareStatement(query).executeQuery().close();
+				PreparedStatement statement = conn.prepareStatement(query);
+				statement.executeQuery().close();
+				statement.close();
 			}
 			booleanResult = true;
 		} catch (SQLException e) {
@@ -536,6 +542,7 @@ public class MySQLDatabase extends Database {
 				PreparedStatementUtils.setObject(statement, 1, (Long) TableUtils.getValue(idRegistration, o));
 			}
 			statement.executeUpdate();
+			statement.close();
 		} catch (SQLException e) {
 			throw new RuntimeException(e);
 		}
@@ -561,6 +568,7 @@ public class MySQLDatabase extends Database {
 		try {
 			PreparedStatement statement = conn.prepareStatement(query.toString());
 			statement.executeUpdate();
+			statement.close();
 		} catch (SQLException e) {
 			throw new RuntimeException(e);
 		}
@@ -642,7 +650,9 @@ public class MySQLDatabase extends Database {
 				} else {
 					q.append("ADD COLUMN ").append(s).append(" ").append(results[1]);
 				}
-				conn.prepareStatement(q.toString()).executeUpdate();
+				PreparedStatement statement = conn.prepareStatement(q.toString());
+				statement.executeUpdate();
+				statement.close();
 			}
 
 		} catch (SQLException e) {

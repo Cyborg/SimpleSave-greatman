@@ -242,6 +242,7 @@ public class SQLiteDatabase extends Database {
 					ResultSet results = statement.executeQuery();
 					QueryResult<T> result = new QueryResult<T>(ResultSetUtils.buildResultList(table, (Class<T>) table.getTableClass(), results));
 					results.close();
+					statement.close();
 					return result;
 			}
 		} catch (SQLException e) {
@@ -390,6 +391,7 @@ public class SQLiteDatabase extends Database {
 					}
 				}
 			}
+			statement.close();
 		} catch (SQLException e) {
 			throw new RuntimeException(e);
 		}
@@ -436,6 +438,7 @@ public class SQLiteDatabase extends Database {
 				PreparedStatementUtils.setObject(statement, 1, (Long) TableUtils.getValue(idRegistration, o));
 			}
 			statement.executeUpdate();
+			statement.close();
 		} catch (SQLException e) {
 			throw new RuntimeException(e);
 		}
@@ -461,6 +464,7 @@ public class SQLiteDatabase extends Database {
 		try {
 			PreparedStatement statement = connection.prepareStatement(query.toString());
 			statement.executeUpdate();
+			statement.close();
 		} catch (SQLException e) {
 			throw new RuntimeException(e);
 		}
@@ -488,6 +492,7 @@ public class SQLiteDatabase extends Database {
 			try {
 				PreparedStatement statement = connection.prepareStatement(builder.toString());
 				statement.executeUpdate();
+				statement.close();
 			} catch (SQLException e) {
 				throw new RuntimeException(e);
 			}
@@ -523,7 +528,9 @@ public class SQLiteDatabase extends Database {
 				String[] results = redo.get(s).split(";");
 				q.append("ALTER TABLE ").append(prefix).append(table.getName()).append(" ");
 				q.append("ADD COLUMN ").append(s).append(" ").append(results[1]);
-				connection.prepareStatement(q.toString()).executeUpdate();
+				PreparedStatement statement = connection.prepareStatement(q.toString());
+				statement.executeUpdate();
+				statement.close();
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();

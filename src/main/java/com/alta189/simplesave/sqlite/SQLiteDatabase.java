@@ -241,6 +241,7 @@ public class SQLiteDatabase extends Database {
 					}
 					ResultSet results = statement.executeQuery();
 					QueryResult<T> result = new QueryResult<T>(ResultSetUtils.buildResultList(table, (Class<T>) table.getTableClass(), results));
+					results.close();
 					return result;
 			}
 		} catch (SQLException e) {

@@ -442,6 +442,7 @@ public class MySQLDatabase extends Database {
 						e.printStackTrace();
 					}
 				}
+				resultSet.close();
 			}
 		} catch (SQLException e) {
 			throw new RuntimeException(e);

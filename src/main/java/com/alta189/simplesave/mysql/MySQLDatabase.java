@@ -605,6 +605,7 @@ public class MySQLDatabase extends Database {
 			try {
 				PreparedStatement statement = conn.prepareStatement(query.toString());
 				statement.executeUpdate();
+				statement.close();
 			} catch (SQLException e) {
 				throw new RuntimeException(e);
 			}

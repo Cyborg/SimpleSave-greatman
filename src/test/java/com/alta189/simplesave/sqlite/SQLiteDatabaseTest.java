@@ -83,6 +83,13 @@ public class SQLiteDatabaseTest {
 
 		try {
 			db.close();
+			db.connect();
+		} catch (ConnectionException e) {
+			e.printStackTrace();
+		}
+		db.directQuery("DROP TBALE test");
+		try {
+			db.close();
 		} catch (ConnectionException e) {
 			fail("Failed to close database! " + e.toString());
 		}

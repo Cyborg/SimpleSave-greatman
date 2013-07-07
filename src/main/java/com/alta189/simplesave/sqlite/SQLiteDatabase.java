@@ -548,10 +548,13 @@ public class SQLiteDatabase extends Database {
 			}
 		}
 		try {
-			if (query.toUpperCase().contains("INSERT INTO") || query.toUpperCase().contains("UPDATE") || query.toUpperCase().contains("DELETE FROM") || query.toUpperCase().contains("DROP TABLE")) {
+			if (query.toUpperCase().contains("INSERT INTO") || query.toUpperCase().contains("UPDATE") || query.toUpperCase().contains("DELETE FROM")) {
 				connection.prepareStatement(query).executeUpdate();
 			} else if (query.toUpperCase().contains("SELECT")) {
 				connection.prepareStatement(query).executeQuery().close();
+			} else if (query.toUpperCase().contains("DROP TABLE")) {
+				Statement stat = connection.createStatement();
+				stat.executeUpdate(query);
 			}
 			booleanResult = true;
 		} catch (SQLException e) {

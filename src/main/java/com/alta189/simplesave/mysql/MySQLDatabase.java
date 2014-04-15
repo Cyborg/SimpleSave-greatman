@@ -462,7 +462,7 @@ public class MySQLDatabase extends Database {
 			}
 		}
 		try {
-			if (query.toUpperCase().contains("INSERT INTO") || query.toUpperCase().contains("UPDATE") || query.toUpperCase().contains("DELETE FROM") || query.toUpperCase().contains("DROP TABLE") || query.toUpperCase().contains("ALTER TABLE")) {
+			if (query.toUpperCase().contains("INSERT INTO") || query.toUpperCase().contains("UPDATE") || query.toUpperCase().contains("DELETE FROM") || query.toUpperCase().contains("DROP TABLE") || query.toUpperCase().contains("ALTER TABLE") || query.toUpperCase().contains("CREATE INDEX")) {
 				PreparedStatement statement = conn.prepareStatement(query);
 				statement.executeUpdate();
 				statement.close();
